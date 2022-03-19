@@ -13,26 +13,26 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let driver of listDrivers">
-        <tr  [ngClass]="{selected : driver === currentDriver}" (click)="currentDriver = driver">
-          <ng-container  *ngIf="editMode === driver; else elseBlock " >
+      <ng-container *ngFor="let driver of listDrivers"><!--cycle for showing elements in the table-->
+        <tr  [ngClass]="{selected : driver === currentDriver}" (click)="currentDriver = driver"> <!-- current driver must be indicated -->
+          <ng-container  *ngIf="editMode === driver; else elseBlock " > <!--Showing fields of form in the case if user has pressed "Edit"-->
             <td>
-              <input formControlName="name"  pattern="[A-Za-z\s]{3,}" required />
+              <input formControlName="name"  pattern="[A-Za-z\s]{3,}" required /> <!-- standart html regexp validator -->
 
             </td>
             <td><img src="../assets/blank-profile-picture.png" alt="empty profile picture" width="64px"></td>
-            <!-- 1-541-754-0001 -->
+            <!-- check pattern 1-111-111-1111 -->
             <td><input formControlName="phone" pattern="[\d]{1}-[\d]{3}-[\d]{3}-[\d]{4}" required /></td>
-            <td><input formControlName="email" pattern="^[A-Za-z]+(.+)@[A-Za-z]+(.+)[A-Za-z]+$" required /></td>
+            <td><input formControlName="email" pattern="^[A-Za-z]+(.+)@[A-Za-z]+(.+)[A-Za-z]+$" required /></td><!-- check email (simple checking)-->
             <td>{{driver.tasks.length}}</td>
             <td>
-              <button type="submit" class="btn btn-success" [disabled]="!editForm.valid">Save</button>
+              <button type="submit" class="btn btn-success" [disabled]="!editForm.valid">Save</button> <!-- user can save form if all fields are valid-->
             </td>
             <td>
-              <button type="button" class="btn btn-danger" (click)="editMode=getDefaultDriver()" >Cancel</button>
+              <button type="button" class="btn btn-danger" (click)="editMode=getDefaultDriver()" >Cancel</button> <!--Reset edit mode without saving-->
             </td>
           </ng-container>
-          <ng-template #elseBlock>
+          <ng-template #elseBlock><!-- usual mode - show only text in the table-->
             <td>
               {{driver.name}}
             </td>
@@ -53,11 +53,11 @@
   </table>
 </form>
 
-<agm-map *ngIf="currentDriver" [latitude]="currentDriver.location.lat" [longitude]="currentDriver.location.lng"  >
-  <agm-marker [latitude]="currentDriver.location.lat" [longitude]="currentDriver.location.lng">
+<agm-map *ngIf="currentDriver" [latitude]="currentDriver.location.lat" [longitude]="currentDriver.location.lng" > <!-- output google map -->
+  <agm-marker [latitude]="currentDriver.location.lat" [longitude]="currentDriver.location.lng"> <!-- current location-->
     <agm-info-window>{{currentDriver.name+" - current place"}}</agm-info-window>
   </agm-marker>
-  <ng-container *ngFor="let task of currentDriver.tasks ">
+  <ng-container *ngFor="let task of currentDriver.tasks "> <!-- cycle of task locations-->
     <agm-marker [latitude]="task.location.lat" [longitude]="task.location.lng">
       <agm-info-window>{{task.id}}</agm-info-window>
     </agm-marker>

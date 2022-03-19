@@ -9,7 +9,7 @@ import {Driver} from './interfaces'
 export class ListDriversService {
 
   constructor(private http: HttpClient) { }
-
+  //getting handle to json with drivers
   getList(): Observable<Driver[]>{
     return this.http.get<Driver[]>('http://localhost:8080/assets/users.json');
   }
