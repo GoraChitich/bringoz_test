@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import Driver from '../driver.interface';
+import {Driver} from '../interfaces';
 import { ListDriversService } from '../list-drivers.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 

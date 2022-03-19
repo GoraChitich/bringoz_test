@@ -15,7 +15,7 @@
     <tbody>
       <ng-container *ngFor="let driver of listDrivers">
         <tr  [ngClass]="{selected : driver === currentDriver}" (click)="currentDriver = driver">
-          <ng-container  *ngIf="editMode && currentDriver && editMode === driver; else elseBlock " >
+          <ng-container  *ngIf="editMode === driver; else elseBlock " >
             <td>
               <input formControlName="name"  pattern="[A-Za-z\s]{3,}" required />
 
@@ -26,10 +26,10 @@
             <td><input formControlName="email" pattern="^[A-Za-z]+(.+)@[A-Za-z]+(.+)[A-Za-z]+$" required /></td>
             <td>{{driver.tasks.length}}</td>
             <td>
-              <button type="submit" class="btn btn-success" *ngIf="editMode.name && editMode === driver" [disabled]="!editForm.valid">Save</button>
+              <button type="submit" class="btn btn-success" [disabled]="!editForm.valid">Save</button>
             </td>
             <td>
-              <button type="button" class="btn btn-danger" *ngIf="editMode.name && editMode === driver" (click)="editMode=getDefaultDriver()" >Cancel</button>
+              <button type="button" class="btn btn-danger" (click)="editMode=getDefaultDriver()" >Cancel</button>
             </td>
           </ng-container>
           <ng-template #elseBlock>
@@ -41,14 +41,12 @@
             <td>{{driver.email}}</td>
             <td>{{driver.tasks.length}}</td>
             <td>
-              <button type="button" class="btn btn-primary" (click)="setEditMode(driver)" [disabled]="editMode.name && editMode != driver " *ngIf="! (editMode.name && editMode === driver)">Edit</button>
+              <button type="button" class="btn btn-primary" (click)="setEditMode(driver)" [disabled]="editMode.name && editMode != driver ">Edit</button>
             </td>
             <td>
-              <button type="button" class="btn btn-danger"  [disabled]="editMode.name && editMode != driver" *ngIf="! (editMode.name && editMode === driver)" (click)="deleteDriver(driver)">Delete</button>
+              <button type="button" class="btn btn-danger"  [disabled]="editMode.name && editMode != driver" (click)="deleteDriver(driver)">Delete</button>
             </td>
           </ng-template>
-
-
         </tr>
       </ng-container>
     </tbody>
