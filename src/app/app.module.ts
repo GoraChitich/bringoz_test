@@ -4,6 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ListDriversComponent } from './list-drivers/list-drivers.component';
 import { AgmCoreModule } from '@agm/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 
 @NgModule({
@@ -15,7 +17,8 @@ import { AgmCoreModule } from '@agm/core';
     BrowserModule, HttpClientModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDOl6qurgJHDdTS-DKqJMT9oecvv1C3KUQ'
-    })
+    }),
+    FormsModule, ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

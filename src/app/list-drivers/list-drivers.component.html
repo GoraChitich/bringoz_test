@@ -1,44 +1,67 @@
-<h1>List Drivers</h1>
-{{listDrivers | json}}
-
 <h2>Tables drivers</h2>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Image</th>
-      <th scope="col">phone #</th>
-      <th scope="col">Number of tasks</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-container *ngFor="let driver of listDrivers">
-
-      <tr  [ngClass]="{selected : driver === currentDriver}" (click)="currentDriver = driver">
-        <td>{{driver.name}}</td>
-        <td><img src="../../assets/blank-profile-picture.png" alt="empty profile picture" width="64px"></td>
-        <td>{{driver.phone}}</td>
-        <td>{{driver.tasks.length}}</td>
+<form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Image</th>
+        <th scope="col">phone #</th>
+        <th scope="col">email</th>
+        <th scope="col">Number of tasks</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
       </tr>
-    </ng-container>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let driver of listDrivers">
+        <tr  [ngClass]="{selected : driver === currentDriver}" (click)="currentDriver = driver">
+          <ng-container  *ngIf="editMode && currentDriver && editMode === driver; else elseBlock " >
+            <td>
+              <input formControlName="name"  pattern="[A-Za-z\s]{3,}" required />
 
-<!--
-<agm-map  [latitude]="lat" [longitude]="lng">
-  <agm-marker [latitude]="lat" [longitude]="lat"></agm-marker>
+            </td>
+            <td><img src="../assets/blank-profile-picture.png" alt="empty profile picture" width="64px"></td>
+            <!-- 1-541-754-0001 -->
+            <td><input formControlName="phone" pattern="[\d]{1}-[\d]{3}-[\d]{3}-[\d]{4}" required /></td>
+            <td><input formControlName="email" pattern="^[A-Za-z]+(.+)@[A-Za-z]+(.+)[A-Za-z]+$" required /></td>
+            <td>{{driver.tasks.length}}</td>
+            <td>
+              <button type="submit" class="btn btn-success" *ngIf="editMode.name && editMode === driver" [disabled]="!editForm.valid">Save</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger" *ngIf="editMode.name && editMode === driver" (click)="editMode=getDefaultDriver()" >Cancel</button>
+            </td>
+          </ng-container>
+          <ng-template #elseBlock>
+            <td>
+              {{driver.name}}
+            </td>
+            <td><img src="../assets/blank-profile-picture.png" alt="empty profile picture" width="64px"></td>
+            <td>{{driver.phone}}</td>
+            <td>{{driver.email}}</td>
+            <td>{{driver.tasks.length}}</td>
+            <td>
+              <button type="button" class="btn btn-primary" (click)="setEditMode(driver)" [disabled]="editMode.name && editMode != driver " *ngIf="! (editMode.name && editMode === driver)">Edit</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger"  [disabled]="editMode.name && editMode != driver" *ngIf="! (editMode.name && editMode === driver)" (click)="deleteDriver(driver)">Delete</button>
+            </td>
+          </ng-template>
 
 
-</agm-map> -->
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</form>
+
 <agm-map *ngIf="currentDriver" [latitude]="currentDriver.location.lat" [longitude]="currentDriver.location.lng"  >
   <agm-marker [latitude]="currentDriver.location.lat" [longitude]="currentDriver.location.lng">
     <agm-info-window>{{currentDriver.name+" - current place"}}</agm-info-window>
   </agm-marker>
   <ng-container *ngFor="let task of currentDriver.tasks ">
-
     <agm-marker [latitude]="task.location.lat" [longitude]="task.location.lng">
       <agm-info-window>{{task.id}}</agm-info-window>
     </agm-marker>
   </ng-container>
-
 </agm-map>
